@@ -1,11 +1,24 @@
 from django.db import models
 
 
+class Controller(models.Model):
+    """Пока хз нужно ли это вообще"""
+    name = models.CharField(max_length=200)
+    ip = models.CharField(max_length=200)
+
+    def __str__(self):
+        return str(self.name)
+
+
 class Client(models.Model):
     """Модель Client, через нее все ищем скорее всего"""
 
     address = models.CharField(max_length=200)
     name = models.CharField(max_length=200)
+    controller = models.ForeignKey(
+        Controller,
+        on_delete=models.CASCADE
+    )
 
     def __str__(self):
         return str(self.id)
@@ -15,6 +28,10 @@ class Server(models.Model):
 
     address = models.CharField(max_length=200)
     name = models.CharField(max_length=200)
+    controller = models.ForeignKey(
+        Controller,
+        on_delete=models.CASCADE
+    )
 
     def __str__(self):
         return str(self.id)
@@ -36,24 +53,8 @@ class Werehouse(models.Model):
         null=True
     )
 
-    def __str__(self):
-        return str(self.id)
-
-
-class Controller(models.Model):
-    """Пока хз нужно ли это вообще"""
-    werehouse = models.ForeignKey(
-        Werehouse,
-        on_delete=models.CASCADE
-    )
-
-    clients = models.ForeignKey(
-        Client,
-        on_delete=models.CASCADE
-    )
-
-    server = models.ForeignKey(
-        Server,
+    controller = models.ForeignKey(
+        Controller,
         on_delete=models.CASCADE
     )
 
